@@ -336,7 +336,7 @@ def test_pred(index, Ws_h, Bs_h, W_o, B_o):
 #                                         alpha=0.1, iterations=100, 
 #                                         layers=1, neurons=10, final=10)
 
-# Ws_h, Bs_h, W_o, B_o = initWB()
-Ws_h, Bs_h, W_o, B_o = read_npz("model.npz")
+Ws_h, Bs_h, W_o, B_o = initWB()
+# Ws_h, Bs_h, W_o, B_o = read_npz("model.npz")
 print(Ws_h, Bs_h, W_o, B_o)
-# save_model(Ws_h=Ws_h, Bs_h=Bs_h, W_o=W_o, B_o=B_o)
+save_model(Ws_h=Ws_h, Bs_h=Bs_h, W_o=W_o, B_o=B_o)
