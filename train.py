@@ -52,6 +52,8 @@ def initWB(layers=1, neurons=10, final=10):
         vBs_h.append(vB_h)
     vW_o = np.random.rand(final, neurons) - 0.5 # 10 -> 10 第二层(Output Layer)有10个神经元，一个10行10列的矩阵
     vB_o = np.random.rand(final, 1) - 0.5 # 一个神经元对应一个偏置， 一个10行1列的矩阵
+    vWs_h = np.array(vWs_h)
+    vBs_h = np.array(vBs_h)
     return vWs_h, vBs_h, vW_o, vB_o
 
 # Then define 2 activation functions, ReLU, Sigmoid
