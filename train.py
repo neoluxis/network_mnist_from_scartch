@@ -232,9 +232,9 @@ def save_model(Ws_h, Bs_h, W_o, B_o):
     
     '''
     np.savez("model.npz", Ws_h=Ws_h, Bs_h=Bs_h, W_o=W_o, B_o=B_o)
-    params = {"Ws_h": Ws_h, "Bs_h": Bs_h, "W_o": W_o, "B_o": B_o}
-    with open("model.json", "w") as json_file:
-        json.dump(params, json_file)
+    # params = {"Ws_h": Ws_h, "Bs_h": Bs_h, "W_o": W_o, "B_o": B_o}
+    # with open("model.json", "w") as json_file:
+    #     json.dump(params, json_file)
     pass
 
 # 定义梯度下降
@@ -332,4 +332,11 @@ def test_pred(index, Ws_h, Bs_h, W_o, B_o):
     plt.show()
     return
 
-Ws_h, Bs_h, W_o, B_o = gradient_descend(tr_images, tr_labels, 0.10, 500, 1, 10, 10)
+# Ws_h, Bs_h, W_o, B_o = gradient_descend(tr_images=tr_images, tr_labels=tr_labels, 
+#                                         alpha=0.1, iterations=100, 
+#                                         layers=1, neurons=10, final=10)
+
+# Ws_h, Bs_h, W_o, B_o = initWB()
+Ws_h, Bs_h, W_o, B_o = read_npz("model.npz")
+print(Ws_h, Bs_h, W_o, B_o)
+# save_model(Ws_h=Ws_h, Bs_h=Bs_h, W_o=W_o, B_o=B_o)
