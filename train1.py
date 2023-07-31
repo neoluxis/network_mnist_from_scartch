@@ -3,7 +3,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 
 # 读取训练数据
-train_data = pd.read_csv('./digit-recognizer/train.csv')
+train_data = pd.read_csv('./datasets/train.csv')
 
 train_data = np.array(train_data)
 m, n = train_data.shape
@@ -76,6 +76,8 @@ def backward_prop(Z1, A1, Z2, A2, W1, W2, X, Y):
     dZ1 = W2.T.dot(dZ2) * ReLU_deriv(Z1)
     dW1 = 1 / m * dZ1.dot(X.T)
     db1 = 1 / m * np.sum(dZ1)
+    # print(W2.T.dot(dZ2).shape, ReLU_deriv(Z1).shape)
+    # raise Exception
     return dW1, db1, dW2, db2
 
 def update_params(W1, b1, W2, b2, dW1, db1, dW2, db2, alpha):
