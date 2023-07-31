@@ -192,15 +192,20 @@ def test_prediction(index, W1, b1, W2, b2, W3, b3):
     current_image = current_image.reshape((28, 28)) * 255
     plt.gray()
     plt.imshow(current_image, interpolation="nearest")
-    plt.show()
+    # plt.show()
+    return prediction[0] == label
 
 
 W1, b1, W2, b2, W3, b3 = gradient_descent(
     X_train, Y_train, alpha=0.10, iterations=500, path="params.npz"
 )
 
-for i in range(10):
-    test_prediction(i, W1, b1, W2, b2, W3, b3)
+corr = 0
+samples = 100
+for i in range(samples):
+    if test_prediction(i, W1, b1, W2, b2, W3, b3):
+        corr+=1
 
 dev_predictions = make_predictions(X_dev, W1, b1, W2, b2, W3, b3)
-get_accuracy(dev_predictions, Y_dev)
+# get_accuracy(dev_predictions, Y_dev)
+print("Accuracy on dev set: ", corr/samples)
