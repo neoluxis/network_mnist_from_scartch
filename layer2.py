@@ -33,7 +33,7 @@ def init_params():
     W3 = np.random.rand(10, 16) - 0.5
     b3 = np.random.rand(10, 1) - 0.5
     return W1, b1, W2, b2, W3, b3
-    
+
 
 # 3 个激活函数, ReLU, Sigmoid, softmax
 def ReLU(Z):
@@ -231,6 +231,7 @@ if __name__ == "__main__":
 
     # Predict
     import csv
+
     pred_data = pd.read_csv("./datasets/test.csv")
     pred_data = np.array(pred_data)
     m_pred, n_pred = pred_data.shape
