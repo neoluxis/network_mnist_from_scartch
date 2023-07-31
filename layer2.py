@@ -26,14 +26,14 @@ _, m_train = X_train.shape
 
 
 def init_params():
-    W1 = np.random.rand(10, 784) - 0.5
-    b1 = np.random.rand(10, 1) - 0.5
-    W2 = np.random.rand(10, 10) - 0.5
-    b2 = np.random.rand(10, 1) - 0.5
-    W3 = np.random.rand(10, 10) - 0.5
+    W1 = np.random.rand(16, 784) - 0.5
+    b1 = np.random.rand(16, 1) - 0.5
+    W2 = np.random.rand(16, 16) - 0.5
+    b2 = np.random.rand(16, 1) - 0.5
+    W3 = np.random.rand(10, 16) - 0.5
     b3 = np.random.rand(10, 1) - 0.5
     return W1, b1, W2, b2, W3, b3
-
+    
 
 # 3 个激活函数, ReLU, Sigmoid, softmax
 def ReLU(Z):
@@ -196,16 +196,51 @@ def test_prediction(index, W1, b1, W2, b2, W3, b3):
     return prediction[0] == label
 
 
-W1, b1, W2, b2, W3, b3 = gradient_descent(
-    X_train, Y_train, alpha=0.10, iterations=500, path="params.npz"
-)
+if __name__ == "__main__":
+    # Train
+    # W1, b1, W2, b2, W3, b3 = gradient_descent(
+    #     X_train, Y_train, alpha=0.10, iterations=4000, path="params.npz" # 继续训练
+    # )
+    # W1, b1, W2, b2, W3, b3 = gradient_descent(
+    #     X_train, Y_train, alpha=0.10, iterations=4000 # 重新训练
+    # )
+    # corr = 0
+    # samples = 100
+    # for i in range(samples):
+    #     if test_prediction(i, W1, b1, W2, b2, W3, b3):
+    #         corr+=1
+    #         pass
+    # dev_predictions = make_predictions(X_dev, W1, b1, W2, b2, W3, b3)
+    # # get_accuracy(dev_predictions, Y_dev)
+    # print("Accuracy on dev set: ", corr/samples)
 
-corr = 0
-samples = 100
-for i in range(samples):
-    if test_prediction(i, W1, b1, W2, b2, W3, b3):
-        corr+=1
+    # Test
+    # W1, b1, W2, b2, W3, b3 = load_params("params.npz")
+    # data_verify = train_data.T
+    # Y_verify = data_verify[0]
+    # X_verify = data_verify[1:n]
+    # X_verify = X_verify / 255.0
+    # _, m_verify = X_verify.shape
+    # corr = 0
+    # samples = 20000
+    # for i in range(samples):
+    #     # print(i)
+    #     if test_prediction(i, W1, b1, W2, b2, W3, b3):
+    #         corr += 1
+    # print(f"Accuracy on verify set: {corr}/{samples}={corr / samples} ")
 
-dev_predictions = make_predictions(X_dev, W1, b1, W2, b2, W3, b3)
-# get_accuracy(dev_predictions, Y_dev)
-print("Accuracy on dev set: ", corr/samples)
+    # Predict
+    import csv
+    pred_data = pd.read_csv("./datasets/test.csv")
+    pred_data = np.array(pred_data)
+    m_pred, n_pred = pred_data.shape
+    X_pred = pred_data.T
+    X_pred = X_pred / 255.0
+    W1, b1, W2, b2, W3, b3 = load_params("results/layer2/16/params.npz")
+    predictions = make_predictions(X_pred, W1, b1, W2, b2, W3, b3)
+    with open("predictions.csv", "w") as file:
+        writer = csv.writer(file)
+        writer.writerow(["ImageId", "Label"])
+        for i in range(m_pred):
+            writer.writerow([i + 1, predictions[i]])
+    pass
