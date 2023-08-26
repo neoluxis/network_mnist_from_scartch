@@ -11,12 +11,12 @@ train_data = np.array(train_data)
 m, n = train_data.shape
 np.random.shuffle(train_data)  # 洗牌，把训练数据打乱
 
-data_dev = train_data[0:1000].T
+data_dev = train_data[0:5000].T
 Y_dev = data_dev[0]
 X_dev = data_dev[1:n]
 X_dev = X_dev / 255.0
 
-data_train = train_data[1000:m].T
+data_train = train_data[5000:m].T
 Y_train = data_train[0]
 X_train = data_train[1:n]
 X_train = X_train / 255.0
@@ -26,11 +26,11 @@ _, m_train = X_train.shape
 
 
 def init_params():
-    W1 = np.random.rand(16, 784) - 0.5
-    b1 = np.random.rand(16, 1) - 0.5
-    W2 = np.random.rand(16, 16) - 0.5
-    b2 = np.random.rand(16, 1) - 0.5
-    W3 = np.random.rand(10, 16) - 0.5
+    W1 = np.random.rand(100, 784) - 0.5
+    b1 = np.random.rand(100, 1) - 0.5
+    W2 = np.random.rand(50, 100) - 0.5
+    b2 = np.random.rand(50, 1) - 0.5
+    W3 = np.random.rand(10, 50) - 0.5
     b3 = np.random.rand(10, 1) - 0.5
     return W1, b1, W2, b2, W3, b3
 
@@ -182,7 +182,7 @@ def make_predictions(X, W1, b1, W2, b2, W3, b3):
     return predictions
 
 
-def test_prediction(index, W1, b1, W2, b2, W3, b3):
+def test_prediction(index, W1, b1, W2, b2, W3, b3, show=False):
     current_image = X_train[:, index, None]
     prediction = make_predictions(X_train[:, index, None], W1, b1, W2, b2, W3, b3)
     label = Y_train[index]
@@ -192,7 +192,8 @@ def test_prediction(index, W1, b1, W2, b2, W3, b3):
     current_image = current_image.reshape((28, 28)) * 255
     plt.gray()
     plt.imshow(current_image, interpolation="nearest")
-    # plt.show()
+    if show:
+        plt.show()
     return prediction[0] == label
 
 
@@ -205,7 +206,7 @@ if __name__ == "__main__":
     #     X_train, Y_train, alpha=0.10, iterations=4000 # 重新训练
     # )
     # corr = 0
-    # samples = 100
+    # samples = 5000
     # for i in range(samples):
     #     if test_prediction(i, W1, b1, W2, b2, W3, b3):
     #         corr+=1
@@ -230,18 +231,39 @@ if __name__ == "__main__":
     # print(f"Accuracy on verify set: {corr}/{samples}={corr / samples} ")
 
     # Predict
-    import csv
+    # import csv
 
-    pred_data = pd.read_csv("./datasets/test.csv")
-    pred_data = np.array(pred_data)
-    m_pred, n_pred = pred_data.shape
-    X_pred = pred_data.T
-    X_pred = X_pred / 255.0
-    W1, b1, W2, b2, W3, b3 = load_params("results/layer2/16/params.npz")
-    predictions = make_predictions(X_pred, W1, b1, W2, b2, W3, b3)
-    with open("predictions.csv", "w") as file:
-        writer = csv.writer(file)
-        writer.writerow(["ImageId", "Label"])
-        for i in range(m_pred):
-            writer.writerow([i + 1, predictions[i]])
+    # pred_data = pd.read_csv("./datasets/test.csv")
+    # pred_data = np.array(pred_data)
+    # m_pred, n_pred = pred_data.shape
+    # X_pred = pred_data.T
+    # X_pred = X_pred / 255.0
+    # W1, b1, W2, b2, W3, b3 = load_params("results/layer2/neuron100-50/params.npz")
+    # predictions = make_predictions(X_pred, W1, b1, W2, b2, W3, b3)
+    # with open("results/layer2/neuron100-50/predictions.csv", "w") as file:
+    #     writer = csv.writer(file)
+    #     writer.writerow(["ImageId", "Label"])
+    #     for i in range(m_pred):
+    #         writer.writerow([i + 1, predictions[i]])
+
+    # neolux
+    neo_data = pd.read_csv("./neolux/28x28.csv")
+    neo_data = np.array(neo_data)
+    m_neo, n_neo = neo_data.shape
+    np.random.shuffle(neo_data)
+    neo_dev = neo_data[0:].T
+    Y_neo = neo_dev[0]
+    X_neo = neo_dev[1:n_neo]
+    X_neo = X_neo / 255.0
+    W1, b1, W2, b2, W3, b3 = load_params("results/layer2/neuron100-50/params.npz")
+    for i in range(10):
+        cu_img = X_neo[:, i, None]
+        pred = make_predictions(cu_img, W1, b1, W2, b2, W3, b3)
+        label = Y_neo[i]
+        print(f"Prediction: {pred}, Label: {label}")
+        cu_img = cu_img.reshape((28, 28)) * 255
+        plt.gray()
+        plt.imshow(cu_img, interpolation="nearest")
+        plt.show()
+
     pass
